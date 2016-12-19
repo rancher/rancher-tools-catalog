@@ -11,6 +11,8 @@ drone-agent:
     - drone-agent-data-volume
   external_links:
     - "${drone_service}:drone"
+  command:
+    - agent
   environment:
     DEBUG: "${debug_mode}"
 
@@ -36,6 +38,7 @@ drone-agent-healthcheck:
   labels:
     io.rancher.container.pull_image: always
   net: 'container:drone-agent'
+  entrypoint: /giddyup
   volumes_from:
     - drone-agent-data-volume
   command: "health"
