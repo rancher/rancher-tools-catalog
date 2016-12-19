@@ -10,6 +10,7 @@ drone-lb:
     io.rancher.container.pull_image: always
     io.rancher.loadbalancer.ssl.ports: "${public_port}"
     io.rancher.scheduler.global: true
+    io.rancher.scheduler.affinity:host_label: "${host_affinity}"
 
 drone-server:
   image: rancher/drone-config:v0.5-dec16-1
