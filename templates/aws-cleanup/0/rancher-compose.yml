@@ -1,0 +1,25 @@
+.catalog:
+    name: "AWS Host Cleanup"
+    version: "v0.1.0"
+    description: "AWS Host Cleanup"
+    questions:
+     - variable: "AWS_ACCESS_KEY_ID"
+       description: "AWS Access Key"
+       label: "AWS Access Key"
+       required: true
+       type: "string"
+     - variable: "AWS_SECRET_ACCESS_KEY"
+       description: "AWS Secret Key"
+       label: "Access Secret"
+       required: true
+       type: "string" 
+
+rancher-aws-host-cleanup:
+    health_check:
+        port: 9777
+        interval: 2000
+        unhealthy_threshold: 3
+        strategy: recreate
+        response_timeout: 2000
+        request_line: GET /ping HTTP/1.0
+        healthy_threshold: 2

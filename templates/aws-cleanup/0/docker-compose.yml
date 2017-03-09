@@ -1,0 +1,9 @@
+rancher-aws-host-cleanup:
+  image: chrisurwin/rancher-aws-host-cleanup:latest
+  tty: true
+  environment:
+    AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+    AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+  labels:
+    io.rancher.container.create_agent: 'true'
+    io.rancher.container.agent.role: environment
