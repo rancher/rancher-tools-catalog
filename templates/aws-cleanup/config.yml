@@ -1,0 +1,5 @@
+name: AWS cleanup
+description: |
+  AWS clean up for discarded Rancher Hosts
+version: v0.1.0
+category: Rancher Services
