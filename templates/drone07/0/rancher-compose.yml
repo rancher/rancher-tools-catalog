@@ -13,14 +13,6 @@
       description: >-
         Contents of /etc/drone/dronerc per the instructions at http://readme.drone.io/0.5/
 
-    - variable: "public_port"
-      type: int
-      required: true
-      label: "Public Port"
-      default: 8000
-      description: >-
-        Port that the load balancer will listen on. Must be accessible to remote driver for webhooks.
-
     - variable: "database_service"
       type: "service"
       label: "Database Service"
@@ -50,7 +42,7 @@ drone-config:
   scale: 1
   metadata:
     dronerc_contents: "${dronerc_contents}"
-    public_port: "${public_port}"
+    public_port: "8000"
     database_service: "${database_service}"
   health_check:
     port: 1620
