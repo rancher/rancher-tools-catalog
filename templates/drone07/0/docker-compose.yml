@@ -1,0 +1,61 @@
+version: '2'
+services:
+  drone-config:
+    image: rancher/drone-config:v0.5-dec16-1
+    tty: true
+    volumes_from:
+      - drone-data-volume
+    labels: 
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label_soft: "{{.Values.host_affinity}}"
+      io.rancher.sidekicks: drone-data-volume,drone-healthcheck,drone-daemon,giddyup-volume
+    {{- if ne .Values.database_service "false" }}
+    external_links:
+      - "{{.Values.database_service}}:database"{{- end }}
+    environment:
+      DEBUG: "{{.Values.debug_mode}}"
+
+  drone-healthcheck:
+    image: rancher/giddyup:v0.17.0
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+    network_mode: 'container:drone-config'
+    command: "giddyup health"
+
+  drone-daemon:
+    image: drone/drone:0.7.1
+    tty: true
+    network_mode: 'container:drone-config'
+    labels: 
+      io.rancher.container.pull_image: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    volumes_from:
+      - drone-data-volume
+      - giddyup-volume
+    environment:
+      DEBUG: "{{.Values.debug_mode}}"
+    entrypoint:
+      - "/opt/rancher/bin/giddyup"
+    command: ["exec", "--wait-for-file", "/etc/drone/dronerc", "--source-file", "/etc/drone/dronerc", "/drone", "server"]
+
+  giddyup-volume:
+    image: rancher/giddyup:v0.17.0
+    network_mode: none
+    labels:
+      io.rancher.container.start_once: 'true'
+    volumes_from:
+      - drone-data-volume
+
+  ## Do not change below. Could cause data loss in upgrade.
+  drone-data-volume:
+    image: busybox
+    network_mode: none
+    command: /bin/true
+    labels:
+      io.rancher.container.start_once: 'true'
+    volumes:
+      - /var/lib/drone
+      - /etc/drone
