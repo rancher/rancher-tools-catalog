@@ -1,0 +1,9 @@
+name: Drone Agent node(s) for Drone 0.7
+description: >-
+  Drone Agent 0.7 node(s)
+version: 0.7-rancher1
+minimum_rancher_version: v1.1.1
+category: Continuous Integration
+maintainer: Engineering <engineering@rancher.com>
+license: Apache 2
+projectURL: https://github.com/rancher/rancher-tools-catalog
