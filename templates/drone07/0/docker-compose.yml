@@ -5,6 +5,7 @@ services:
     tty: true
     volumes_from:
       - drone-data-volume
+      - giddyup-volume
     labels: 
       io.rancher.container.pull_image: always
       io.rancher.scheduler.affinity:host_label_soft: "{{.Values.host_affinity}}"
@@ -16,7 +17,7 @@ services:
       DEBUG: "{{.Values.debug_mode}}"
 
   drone-healthcheck:
-    image: rancher/giddyup:v0.17.0
+    image: rancher/giddyup:v0.17.1
     tty: true
     labels:
       io.rancher.container.pull_image: always
@@ -42,7 +43,7 @@ services:
     command: ["exec", "--wait-for-file", "/etc/drone/dronerc", "--source-file", "/etc/drone/dronerc", "/drone", "server"]
 
   giddyup-volume:
-    image: rancher/giddyup:v0.17.0
+    image: rancher/giddyup:v0.17.1
     network_mode: none
     labels:
       io.rancher.container.start_once: 'true'
