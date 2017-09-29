@@ -1,0 +1,56 @@
+.catalog:
+  name: Drone
+  version: 0.8.1-rancher1
+  description: |
+    Drone Server version 0.8.1
+
+  questions:
+    - variable: "dronerc_contents"
+      type: "multiline"
+      required: true
+      label: >-
+        "Drone server configs to be inserted into /etc/drone/dronerc"
+      description: >-
+        Contents of /etc/drone/dronerc per the instructions at http://readme.drone.io/0.5/
+
+    - variable: "database_service"
+      type: "service"
+      label: "Database Service"
+      required: false
+      description: >-
+        Service to link to for database. For instance if using the default Rancher Galera cluster select galera/galera-lb.
+
+    - variable: "host_affinity"
+      type: "string"
+      default: ''
+      require: false
+      label: "host label(s) for cluster scheduling node affinity"
+      description: >-
+        Specificy a host label for node scheduling affinity. Example: If you have labelled the node(s) on which you would like
+        Drone Server to live 'ci.role=drone_server' specify 'ci.role=drone_server' here.
+
+    - variable: "debug_mode"
+      type: "string"
+      required: false
+      default: "false"
+      label: "Enable verbose logging during container initialization"
+      description: >-
+        Enable verbose logging mode during container initialization and startup. Be warned that debug mode may log
+        sensitive information including credentials.
+
+drone-daemon:
+  scale: 1
+  metadata:
+    cloud-init:
+      write_files:
+        - path: /etc/drone/dronerc
+          content: |
+            ${dronerc_contents}
+  health_check:
+    port: 1620
+    interval: 2000
+    unhealthy_threshold: 3
+    strategy: recreate
+    request_line: GET /ping HTTP/1.0
+    healthy_threshold: 2
+    response_timeout: 2000
