@@ -1,0 +1,8 @@
+name: Drone Server
+description: >-
+    Drone Server
+version: 0.8.1-rancher1
+category: Continuous Integration
+maintainer: Engineering <engineering@rancher.com>
+license: Apache 2
+project_url: https://github.com/rancher/rancher-catalog-tools
