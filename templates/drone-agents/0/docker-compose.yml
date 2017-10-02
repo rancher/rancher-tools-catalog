@@ -25,7 +25,7 @@ drone-agent:
     - /bin/drone-agent
 
 drone-agent-healthcheck:
-  image: rancher/giddyup:v0.17.1
+  image: rancher/giddyup:v0.19.0
   tty: true
   labels:
     io.rancher.container.pull_image: always
@@ -36,7 +36,7 @@ drone-agent-healthcheck:
   command: "health"
 
 giddyup-volume:
-  image: rancher/giddyup:v0.17.1
+  image: rancher/giddyup:v0.19.0
   net: none
   labels:
     io.rancher.container.start_once: true
