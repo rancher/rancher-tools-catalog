@@ -20,7 +20,7 @@ services:
       - "{{.Values.database_service}}:database"{{- end }}
     entrypoint:
       - "/opt/rancher/bin/giddyup"
-    command: ["exec", "--wait-for-file", "/etc/drone/dronerc", "--source-file", "/etc/drone/dronerc", "/drone", "server"]
+    command: ["exec", "--cloud-init", "--source-file", "/etc/drone/dronerc", "/bin/drone-server"]
 
   drone-healthcheck:
     image: rancher/giddyup:v0.19.0
