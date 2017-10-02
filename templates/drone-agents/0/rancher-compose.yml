@@ -61,7 +61,7 @@ drone-agent:
     cloud-init:
       write_files:
         - path: /etc/drone/dronerc
-          contents: |
+          content: |
             ${dronerc_contents}
     drone_service: "${drone_service}"
     drone_service_tcp_port: "${drone_service_tcp_port}"
