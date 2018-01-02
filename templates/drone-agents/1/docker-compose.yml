@@ -1,0 +1,53 @@
+drone-agent:
+  image: drone/agent:0.8.2
+  tty: true
+  labels:
+    io.rancher.container.pull_images: always
+    io.rancher.scheduler.affinity:host_label: "${host_affinity}"
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/drone-agent
+    io.rancher.sidekicks: drone-agent-data-volume, drone-agent-healthcheck, giddyup-volume
+  external_links:
+    - "${drone_service}:drone"
+  environment:
+    DEBUG: "${debug_mode}"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /var/lib/docker:/var/lib/docker
+  volumes_from:
+    - drone-agent-data-volume
+    - giddyup-volume
+  entrypoint: /opt/rancher/bin/giddyup
+  command:
+    - exec
+    - --cloud-init
+    - --source-file
+    - /etc/drone/dronerc
+    - /bin/drone-agent
+
+drone-agent-healthcheck:
+  image: rancher/giddyup:v0.19.0
+  tty: true
+  labels:
+    io.rancher.container.pull_image: always
+  net: 'container:drone-agent'
+  entrypoint: /opt/rancher/bin/giddyup
+  volumes_from:
+    - drone-agent-data-volume
+  command: "health"
+
+giddyup-volume:
+  image: rancher/giddyup:v0.19.0
+  net: none
+  labels:
+    io.rancher.container.start_once: true
+  volumes_from:
+    - drone-agent-data-volume
+
+drone-agent-data-volume:
+  image: busybox
+  net: none
+  command: /bin/true
+  labels:
+    io.rancher.container.start_once: true
+  volumes:
+    - /etc/drone
